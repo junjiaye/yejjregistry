@@ -45,6 +45,7 @@ public class YejjRegistryServiceImpl implements RegistryService {
         instance.setStatus(true);
         VERSION.incrementAndGet();
         renew(instance,service);
+        VERSIONS.put(service, VERSION.incrementAndGet());
         return instance;
     }
 
@@ -57,6 +58,7 @@ public class YejjRegistryServiceImpl implements RegistryService {
         log.info("======> instance unregistered", instance.toUrl());
         matas.removeIf(l -> l.equals(instance));
         renew(instance,service);
+        VERSIONS.put(service, VERSION.incrementAndGet());
         return instance;
     }
 

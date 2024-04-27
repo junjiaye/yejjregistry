@@ -1,5 +1,7 @@
 package io.github.junjiaye.yejjregistry.controller;
 
+import io.github.junjiaye.yejjregistry.cluster.Cluster;
+import io.github.junjiaye.yejjregistry.cluster.Server;
 import io.github.junjiaye.yejjregistry.model.InstanceMeta;
 import io.github.junjiaye.yejjregistry.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,9 @@ import java.util.Map;
 public class YeJJRegistryController {
     @Autowired
     RegistryService registryService;
+
+    @Autowired
+    Cluster cluster;
 
     @RequestMapping("/reg")
     public InstanceMeta register(@RequestParam String service, @RequestBody InstanceMeta instance){
@@ -55,4 +60,30 @@ public class YeJJRegistryController {
         log.info("versions {}",service);
         return registryService.versions(service);
     }
+
+    //探活
+    @RequestMapping("/info")
+    public Server info(){
+        log.info("info--- {}",cluster.self());
+        return cluster.self();
+    }
+
+    @RequestMapping("/getServers")
+    public List<Server> getServers(){
+        log.info("info--- {}",cluster.getServers());
+        return cluster.getServers();
+    }
+
+    @RequestMapping("/getLeader")
+    public Server getLeader(){
+        log.info("info--- {}",cluster.leader());
+        return cluster.leader();
+    }
+    @RequestMapping("/sl")
+    public Server sl(){
+        cluster.self().setLeader(true);
+        log.info("info--- {}",cluster.self());
+        return cluster.self();
+    }
+
 }

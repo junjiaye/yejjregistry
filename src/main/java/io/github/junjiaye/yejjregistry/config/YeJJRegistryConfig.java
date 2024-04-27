@@ -1,5 +1,6 @@
 package io.github.junjiaye.yejjregistry.config;
 
+import io.github.junjiaye.yejjregistry.cluster.Cluster;
 import io.github.junjiaye.yejjregistry.health.YeJJHealthChecker;
 import io.github.junjiaye.yejjregistry.service.RegistryService;
 import io.github.junjiaye.yejjregistry.service.YejjRegistryServiceImpl;
@@ -21,8 +22,13 @@ public class YeJJRegistryConfig {
         return new YejjRegistryServiceImpl();
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public YeJJHealthChecker healthChecker(@Autowired RegistryService registryService) {
-        return new YeJJHealthChecker(registryService);
+//    @Bean(initMethod = "start", destroyMethod = "stop")
+//    public YeJJHealthChecker healthChecker(@Autowired RegistryService registryService) {
+//        return new YeJJHealthChecker(registryService);
+//    }
+
+    @Bean(initMethod = "init")
+    public Cluster cluster(@Autowired YeJJRegistryConfigProperties properties) {
+        return new Cluster(properties);
     }
 }
